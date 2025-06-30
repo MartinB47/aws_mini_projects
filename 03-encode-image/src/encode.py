@@ -8,9 +8,10 @@ import matplotlib.pyplot as plt
 
 def message_to_bits(message):
     if isinstance(message, str):
-        bits = np.unpackbits(np.frombuffer(message, dtype=np.uint8))
-    else:
-        raise ValueError("Message must be a string")
+        message = message.encode("utf-8")  # Convert string to bytes
+    elif not isinstance(message, (bytes, bytearray)):
+        raise ValueError("Message must be a string or bytes-like object")
+    bits = np.unpackbits(np.frombuffer(message, dtype=np.uint8))
     return bits
 
 
@@ -30,8 +31,8 @@ def plot_image(matrix) -> io.BytesIO:
 
     ax.set_xticks([])
     ax.set_yticks([])
-    ax.gca().set_xticks(np.arange(-0.5, side, 1), minor=True)
-    ax.gca().set_yticks(np.arange(-0.5, side, 1), minor=True)
+    ax.set_xticks(np.arange(-0.5, side, 1), minor=True)
+    ax.set_yticks(np.arange(-0.5, side, 1), minor=True)
     ax.grid(which="minor", color="lightgray", linestyle="-", linewidth=0.5)
     ax.set_title(f"Encoded message as {side}×{side} matrix")
     fig.tight_layout()
