@@ -31,4 +31,4 @@ Outputs:
   InvokeURL:
     Description: "API endpoint URL for the function"
     Value:
-      Fn::Sub: "https://${EncodeApi}.execute-api.${AWS::Region}.amazonaws.com"
+      Fn::Sub: "https://${EncodeApi}.execute-api.${AWS::Region}.amazonaws.com/generate"
