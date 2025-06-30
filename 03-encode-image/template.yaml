@@ -1,36 +1,20 @@
-AWSTemplateFormatVersion: '2010-09-09'
+AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
 Description: < Encode provided string into pixelated square
-
-Parameters:
-  EcrImageUri:
-    Type: String
-    Description: URI of the pushed container image, e.g. 123456789012.dkr.ecr.us-east-1.amazonaws.com/encode:latest
-  BucketName:
-    Type: String
-    Default: encode-string
 
 Resources:
   EncodeApi:
     Type: AWS::Serverless::HttpApi
-    Properties:
-      BinaryMediaTypes: [ 'image/png' ]
+    Properties: {}
 
   EncodeFunction:
     Type: AWS::Serverless::Function
     Properties:
-      PackageType: image
-      ImageUri: !Sub "${ECRRepoUri}:latest"
+      PackageType: Image
       MemorySize: 1024
       Timeout: 30
       Architectures:
-      - x86_64
-      Environment:
-        Variables:
-          BUCKET: !Ref BucketName
-      Policies:
-      - S3WritePolicy:
-        BucketName: !Ref BucketName
+        - x86_64
       Events:
         HttpInvoke:
           Type: HttpApi
@@ -38,7 +22,13 @@ Resources:
             ApiId: !Ref EncodeApi
             Path: /generate
             Method: POST
+    Metadata:
+      Dockerfile: Dockerfile
+      DockerContext: .
+      DockerTag: latest
 
 Outputs:
   InvokeURL:
-    Value: !Sub "https://${EncodeApi}.execute-api.${AWS::Region}.amazonaws.com"
+    Description: "API endpoint URL for the function"
+    Value:
+      Fn::Sub: "https://${EncodeApi}.execute-api.${AWS::Region}.amazonaws.com"
