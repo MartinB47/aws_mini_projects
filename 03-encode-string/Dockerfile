@@ -1,15 +1,11 @@
-# use the AL2023‐based Python 3.12 Lambda image
-FROM public.ecr.aws/lambda/python:3.12       
+# Use the standard AWS Lambda Python image
+FROM public.ecr.aws/lambda/python:3.12
 
-# install system libs via microdnf instead of yum
-RUN microdnf install -y gcc gfortran libpng-devel freetype-devel \
- && microdnf clean all
-
-# Python deps
+# Copy requirements first for better caching
 COPY requirements.txt .
 RUN pip3 install --no-cache-dir -r requirements.txt
 
-# Source code
+# Copy source code
 COPY app.py .
 COPY src/ ./src
 
