@@ -1,0 +1,61 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: A simple serverless application that manages a counter using AWS Lambda and DynamoDB.
+
+Globals:
+  Function:
+    Timeout: 3
+
+Resources:
+  CounterTable:
+    Type: AWS::Serverless::SimpleTable
+
+  CounterFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/
+      Handler: app.lambda_handler
+      Runtime: python3.13
+      Architectures: [x86_64]
+
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref CounterTable
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref CounterTable
+
+      Events:
+        CounterApiIncrement:
+          Type: HttpApi
+          Properties:
+            Path: /counter/increment
+            Method: POST
+
+        CounterApiReset:
+          Type: HttpApi
+          Properties:
+            Path: /counter/reset
+            Method: POST
+
+        CounterApiGet:
+          Type: HttpApi
+          Properties:
+            Path: /counter
+            Method: GET
+
+Outputs:
+  # URL for the increment route: POST /counter/increment
+  CounterApiIncrement:
+    Description: "Invoke URL for POST /counter/increment"
+    Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com/counter/increment"
+
+  # URL for the reset route: POST /counter/reset
+  CounterApiReset:
+    Description: "Invoke URL for POST /counter/reset"
+    Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com/counter/reset"
+
+  # URL for the get route: GET /counter
+  CounterApiGet:
+    Description: "Invoke URL for GET /counter"
+    Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com/counter"
