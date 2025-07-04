@@ -6,8 +6,7 @@ COPY requirements.txt .
 RUN pip3 install -r requirements.txt
 
 # Copy source code
-COPY app.py .
 COPY src/ ./src
 
 # Lambda entrypoint
-CMD ["app.lambda_handler"]
+CMD ["src.app.lambda_handler"]
