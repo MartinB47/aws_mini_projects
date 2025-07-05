@@ -24,7 +24,7 @@ The application leverages AWS Lambda for serverless compute, eliminating the nee
 
 API Gateway provides the HTTP interface, handling request routing, authentication, and response formatting. The containerized approach allows us to include complex dependencies like NumPy for numerical computing, Pillow for image processing, and scikit-learn for the clustering algorithm without hitting Lambda's deployment package size limits.
 
-The system allocates 1024 MB of memory to handle image processing efficiently, with a 30-second timeout to accommodate larger images. The fixed random seed ensures reproducible results, making the API suitable for applications requiring consistent color analysis.
+The system allocates 1024 MB of memory to handle image processing efficiently, with a 60-second timeout to accommodate larger images. The fixed random seed ensures reproducible results, making the API suitable for applications requiring consistent color analysis.
 
 ## Key Features
 
