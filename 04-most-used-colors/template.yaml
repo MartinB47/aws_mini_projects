@@ -1,0 +1,32 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: |
+  AWS Lambda API that analyzes images and returns the top 5 most dominant colors using K-means++ clustering.
+  The API accepts base64-encoded images and uses K-means++ clustering to extract dominant colors.
+  Returns RGB values for the top 5 most prominent colors in the image.
+
+Globals:
+  Function:
+    Timeout: 10
+    MemorySize: 1024
+
+Resources:
+  ColorAnalysisFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      PackageType: Image
+      Events:
+        ColorAnalysis:
+          Type: Api
+          Properties:
+            Path: /analyze-colors
+            Method: post
+    Metadata:
+      Dockerfile: Dockerfile
+      DockerContext: .
+      DockerTag: latest
+
+Outputs:
+  ColorAnalysisApi:
+    Description: "API Gateway endpoint URL for Prod stage for Color Analysis function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/prod/analyze-colors"
