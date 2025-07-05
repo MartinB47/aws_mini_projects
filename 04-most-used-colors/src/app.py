@@ -12,25 +12,6 @@ RANDOM_SEED = 47
 np.random.seed(RANDOM_SEED)
 
 
-def validate_base64_image(base64_string: str) -> bool:
-    """Validate base64 encoded image string."""
-    try:
-        # Check if it's a valid base64 string
-        if not re.match(r"^[A-Za-z0-9+/]*={0,2}$", base64_string):
-            return False
-
-        # Try to decode
-        image_data = base64.b64decode(base64_string)
-
-        # Try to open as image
-        image = Image.open(io.BytesIO(image_data))
-        image.verify()  # Verify it's a valid image
-
-        return True
-    except Exception:
-        return False
-
-
 def extract_colors_from_image(image_data: bytes) -> List[List[int]]:
     """Extract top 5 dominant colors using K-means++ clustering."""
     try:
@@ -90,14 +71,15 @@ def lambda_handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     }
     """
     try:
-        # Parse request body
-        if "body" not in event:
-            return {
-                "statusCode": 400,
-                "body": json.dumps({"error": "Missing image data in request body"}),
-            }
-
-        base64_image = event["body"]
+        # Parse the JSON wrapper or fallback to raw base64
+        try:
+            payload = json.loads(event["body"])
+            if "body" not in payload:
+                raise ValueError("JSON missing 'body' field")
+            base64_image = payload["body"]
+        except (json.JSONDecodeError, ValueError):
+            # fallback: assume the whole body *is* the base64 string
+            base64_image = event["body"]
 
         # Input sanitization
         if not isinstance(base64_image, str):
@@ -106,24 +88,17 @@ def lambda_handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                 "body": json.dumps({"error": "Image data must be a string"}),
             }
 
-        # Remove potential data URL prefix
+        # Strip any data-url prefix
         if base64_image.startswith("data:image"):
-            base64_image = base64_image.split(",")[1]
+            base64_image = base64_image.split(",", 1)[1]
 
-        # Validate base64 image
-        if not validate_base64_image(base64_image):
-            return {
-                "statusCode": 400,
-                "body": json.dumps({"error": "Invalid or corrupted image data"}),
-            }
-
-        # Decode base64 image
+        # Now decode with validation
         try:
-            image_data = base64.b64decode(base64_image)
+            image_data = base64.b64decode(base64_image, validate=True)
         except Exception:
             return {
                 "statusCode": 400,
-                "body": json.dumps({"error": "Failed to decode base64 image data"}),
+                "body": json.dumps({"error": "Invalid base64 image data"}),
             }
 
         # Extract dominant colors

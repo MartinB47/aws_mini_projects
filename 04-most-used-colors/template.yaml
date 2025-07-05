@@ -7,7 +7,7 @@ Description: |
 
 Globals:
   Function:
-    Timeout: 10
+    Timeout: 30
     MemorySize: 1024
 
 Resources:
@@ -29,4 +29,4 @@ Resources:
 Outputs:
   ColorAnalysisApi:
     Description: "API Gateway endpoint URL for Prod stage for Color Analysis function"
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/prod/analyze-colors"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/analyze-colors"
