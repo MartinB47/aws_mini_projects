@@ -59,9 +59,6 @@ python tests/create_test_images.py
 
 # Test with sample images
 sam local invoke ColorAnalysisFunction -e tests/events/rgb_stripes_event.json
-
-# Visualize the results
-python visualize_colors.py colors_result.json
 ```
 
 ### Deployment Process
