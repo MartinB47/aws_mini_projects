@@ -51,6 +51,9 @@ To test the application locally, first install the required dependencies using p
 The local testing process involves generating test images with specific color patterns, invoking the Lambda function locally using SAM CLI, and visualizing the results using the included color visualization script. This comprehensive testing approach ensures the API works correctly before deployment.
 
 ```bash
+# Build
+sam build
+
 # Install dependencies
 pip install -r requirements.txt
 
