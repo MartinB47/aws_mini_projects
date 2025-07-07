@@ -100,9 +100,13 @@ def main():
 
     print("\nTest files created successfully!")
     print("\nTo test with SAM local invoke:")
-    print("sam local invoke ColorAnalysisFunction -e tests/events/rgb_stripes_event.json")
+    print(
+        "sam local invoke ColorAnalysisFunction -e tests/events/rgb_stripes_event.json"
+    )
     print("sam local invoke ColorAnalysisFunction -e tests/events/gradient_event.json")
-    print("sam local invoke ColorAnalysisFunction -e tests/events/solid_colors_event.json")
+    print(
+        "sam local invoke ColorAnalysisFunction -e tests/events/solid_colors_event.json"
+    )
 
 
 if __name__ == "__main__":
