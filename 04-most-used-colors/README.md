@@ -129,6 +129,16 @@ curl -X POST \
 python visualize_colors.py colors_result.json
 ```
 
+### How to Find Your API Endpoint
+
+If you have lost or forgotten your deployed API Gateway endpoint URL, you can retrieve it using the AWS CLI with the following command:
+
+```bash
+aws cloudformation describe-stacks --stack-name most-used-colors --query "Stacks[0].Outputs" --output table
+```
+
+Look for the output value corresponding to your API endpoint in the results.
+
 ## Algorithm Implementation Details
 
 The color extraction process follows a carefully designed pipeline that ensures both accuracy and performance. Image processing begins with format conversion to ensure consistent color space handling, followed by pixel extraction that preserves the original image's color information.
