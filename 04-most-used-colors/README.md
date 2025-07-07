@@ -59,6 +59,10 @@ python tests/create_test_images.py
 
 # Test with sample images
 sam local invoke ColorAnalysisFunction -e tests/events/rgb_stripes_event.json
+
+# Test with your own image
+echo "{\"body\":\"$(base64 -i your_image.jpeg)\"}" \
+  | sam local invoke ColorAnalysisFunction -e -
 ```
 
 ### Deployment Process
@@ -112,14 +116,10 @@ POST /analyze-colors
 ### Example Usage
 
 ```bash
-# Convert image to base64
-base64_image=$(base64 -i your_image.jpg)
-
-# Send request and save response
 curl -X POST \
   https://{api-id}.execute-api.{region}.amazonaws.com/prod/analyze-colors \
   -H "Content-Type: application/json" \
-  -d "{\"body\": \"$base64_image\"}" \
+  -d "{\"body\": \"$(base64 -i your_image.jpeg)\"}" \
   -o colors_result.json
 
 # Visualize the colors
