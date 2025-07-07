@@ -134,7 +134,7 @@ python visualize_colors.py colors_result.json
 If you have lost or forgotten your deployed API Gateway endpoint URL, you can retrieve it using the AWS CLI with the following command:
 
 ```bash
-aws cloudformation describe-stacks --stack-name most-used-colors --query "Stacks[0].Outputs" --output table
+aws cloudformation describe-stacks --stack-name {your_stack_name} --query "Stacks[0].Outputs" --output table
 ```
 
 Look for the output value corresponding to your API endpoint in the results.
