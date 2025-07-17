@@ -1,2 +1,10 @@
+# AWS SAM build artifacts and config
 .aws-sam/
 samconfig.toml
+
+# Terraform state files - contain sensitive info, should not be committed
+terraform.tfstate
+terraform.tfstate.backup
+
+# Terraform working directory - contains plugins and modules, can be recreated
+.terraform/
