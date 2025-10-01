@@ -1,1 +1,12 @@
+# Translation results
 outputs/
+
+# Terraform
+*.tfstate
+*.tfstate.*
+*.tfstate.backup
+.terraform/
+.terraform.lock.hcl
+
+# Lambda deployment packages
+*.zip
